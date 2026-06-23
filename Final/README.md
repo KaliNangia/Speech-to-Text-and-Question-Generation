@@ -171,6 +171,7 @@ If you encounter memory allocation issues while transcribing:
 
 ---
 
+- **Pipeline Integration**: Created the unified notebook [pipeline.ipynb](pipeline.ipynb) containing the entire workflow (Ingestion ➔ Suppression ➔ Diarization ➔ Local Gurmukhi Whisper-LoRA Transcription ➔ Devanagari translation and insights extraction).
 - **Completed By**: Kali
-- **Date & Time**: June 23, 2026, at 11:57 AM IST
+- **Date & Time**: June 23, 2026, at 11:59 AM IST
 - **Version**: 1.0.0
