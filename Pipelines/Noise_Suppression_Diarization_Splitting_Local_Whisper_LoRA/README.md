@@ -9,11 +9,39 @@ A production-grade, end-to-end speech processing pipeline notebook ([noise_suppr
 
 ```mermaid
 graph TD
-    A[1. Google Drive Input File] -->|Ingestion & 16kHz mono standardization| B[2. Dynamic Noise Suppression]
-    B -->|Clean WAV Export| C[3. Pyannote Speaker Diarization]
-    C -->|Timeline Merging & Turn Refinement| D[4. Multi-Format Serializers]
-    D -->|Audio Splitting & Turn Isolation| E[5. In-Memory Whisper LoRA Transcription]
-    E -->|Fetch Transcript JSON File| F[6. Gemini Devanagari Translation & Insights]
+    subgraph Ingestion [1. Audio Ingestion & Standardization]
+        A1[Google Drive Audio File] -->|Load & Resample| A2[16kHz Mono Standardization]
+        A2 -->|Export WAV| A3[Standardized WAV File]
+    end
+
+    subgraph Suppression [2. Dynamic Noise Suppression]
+        A3 -->|Estimate Noise Profile| B1[Non-Stationary Noise Reduction]
+        B1 -->|Save Lossless WAV| B2[Cleaned WAV File]
+    end
+
+    subgraph Diarization [3. Pyannote Speaker Diarization]
+        B2 -->|Load Pyannote Model onto GPU| C1[Diarization Inference]
+        C1 -->|Cluster Speaker Embeddings| C2[Raw Timeline JSON]
+    end
+
+    subgraph Refinement [4. Timeline Merging & Serialization]
+        C2 -->|Merge Silence Gaps < 1.5s| D1[Refined Timeline]
+        D1 -->|Calculate Participation Stats| D2[Multi-Format Timelines CSV/RTTM/TXT]
+        D1 -->|Generate Markdown Report| D3[Diarized MD Report]
+    end
+
+    subgraph Splitting [5. Audio Splitting & Speaker Isolation]
+        B2 & D1 -->|Slice Audio Array by Timestamps| E1[Audio Slices]
+        E1 -->|Concatenate turns per speaker| E2[Speaker-wise Isolated WAVs]
+        E1 -->|Save individual sequence chunks| E3[Individual Turn WAVs]
+    end
+
+    subgraph Transcription [6. Local Whisper-LoRA & Gemini Insights]
+        E1 -->|Spectrogram Extraction| F1[Local Whisper Model]
+        F1 -->|Overlay Gurmukhi LoRA Adapter| F2[Local Gurmukhi STT]
+        F2 -->|Generate Chronological Transcript| F3[Punjabi Transcript JSON]
+        F3 -->|Gemini Transliterator & Analyst| F4[Devanagari Transliteration & Insights MD]
+    end
 ```
 
 ## Overview

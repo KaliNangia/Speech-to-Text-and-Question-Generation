@@ -10,12 +10,39 @@ By separating these steps, you can run, test, and debug individual components of
 
 ```mermaid
 graph TD
-    A[Raw Audio File] -->|Step 1: Ingestion| B(Standardized WAV)
-    B -->|Step 2: Suppression| C(Cleaned WAV)
-    C -->|Step 3: Diarization| D(Raw Timeline JSON)
-    D -->|Step 4: Refinement| E(Refined Timelines & RTTM/CSV/TXT/MD)
-    E & C -->|Step 5: Splitting| F(Isolated Speaker WAVs)
-    E & C & F -->|Step 6: Transcription & Insights| G(Full transcripts & Gemini Insights MD)
+    subgraph Ingestion [Step 1: Audio Ingestion & Standardization]
+        A1[Google Drive Audio File] -->|Load & Resample| A2[16kHz Mono Standardization]
+        A2 -->|Export WAV| A3[Standardized WAV File]
+    end
+
+    subgraph Suppression [Step 2: Dynamic Noise Suppression]
+        A3 -->|Estimate Noise Profile| B1[Non-Stationary Noise Reduction]
+        B1 -->|Save Lossless WAV| B2[Cleaned WAV File]
+    end
+
+    subgraph Diarization [Step 3: Speaker Diarization]
+        B2 -->|Load Pyannote Model onto GPU| C1[Diarization Inference]
+        C1 -->|Cluster Speaker Embeddings| C2[Raw Timeline JSON]
+    end
+
+    subgraph Refinement [Step 4: Timeline Merging & Serialization]
+        C2 -->|Merge Silence Gaps < 1.5s| D1[Refined Timeline]
+        D1 -->|Calculate Participation Stats| D2[Multi-Format Timelines CSV/RTTM/TXT]
+        D1 -->|Generate Markdown Report| D3[Diarized MD Report]
+    end
+
+    subgraph Splitting [Step 5: Audio Splitting & Speaker Isolation]
+        B2 & D1 -->|Slice Audio Array by Timestamps| E1[Audio Slices]
+        E1 -->|Concatenate turns per speaker| E2[Speaker-wise Isolated WAVs]
+        E1 -->|Save individual sequence chunks| E3[Individual Turn WAVs]
+    end
+
+    subgraph Transcription [Step 6: Local Whisper-LoRA & Gemini Insights]
+        E1 -->|Spectrogram Extraction| F1[Local Whisper Model]
+        F1 -->|Overlay Gurmukhi LoRA Adapter| F2[Local Gurmukhi STT]
+        F2 -->|Generate Chronological Transcript| F3[Punjabi Transcript JSON]
+        F3 -->|Gemini Transliterator & Analyst| F4[Devanagari Transliteration & Insights MD]
+    end
 ```
 
 ---
