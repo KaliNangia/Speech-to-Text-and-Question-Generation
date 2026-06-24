@@ -1,7 +1,7 @@
 # 🎙️ Unified Noise Suppression, Diarization, Splitting, & Speaker-Wise Local/API Transcription Pipeline
 
 
-A production-grade, end-to-end speech processing pipeline notebook (`pipeline.ipynb`) that converts raw outreach speech audio files into speaker-attributed transcripts, translations, and insights reports.
+A production-grade, end-to-end speech processing pipeline notebook ([noise_suppression_diarization_splitting_local_whisper_transcription.ipynb](noise_suppression_diarization_splitting_local_whisper_transcription.ipynb)) that converts raw outreach speech audio files into speaker-attributed transcripts, translations, and insights reports.
 
 ---
 
@@ -40,9 +40,9 @@ This directory contains the final integrated pipeline which automates:
 ## Pipeline Structure
 
 ```
-Final/
-├── pipeline.ipynb       # Unified STT, Diarization & Insights notebook
-└── README.md            # This file
+Pipelines/Noise_Suppression_Diarization_Splitting_Local_Whisper_LoRA/
+├── noise_suppression_diarization_splitting_local_whisper_transcription.ipynb  # Local GPU Whisper-LoRA + Gemini Insights Pipeline
+└── README.md                                                                  # This file
 ```
 
 ---
@@ -58,7 +58,7 @@ Final/
 
 ### Setup
 
-Open the [pipeline.ipynb](pipeline.ipynb) notebook in Google Colab and run Step 0 to install all dependencies:
+Open the [noise_suppression_diarization_splitting_local_whisper_transcription.ipynb](noise_suppression_diarization_splitting_local_whisper_transcription.ipynb) notebook in Google Colab and run Step 0 to install all dependencies:
 
 ```bash
 # Core dependencies installed in Step 0
@@ -171,7 +171,7 @@ If you encounter memory allocation issues while transcribing:
 
 ---
 
-- **Pipeline Integration**: Created the unified notebook [pipeline.ipynb](pipeline.ipynb) containing the entire workflow (Ingestion ➔ Suppression ➔ Diarization ➔ Local Gurmukhi Whisper-LoRA Transcription ➔ Devanagari translation and insights extraction).
+- **Pipeline Integration**: Created the unified notebook [noise_suppression_diarization_splitting_local_whisper_transcription.ipynb](noise_suppression_diarization_splitting_local_whisper_transcription.ipynb) containing the entire workflow (Ingestion ➔ Suppression ➔ Diarization ➔ Local Gurmukhi Whisper-LoRA Transcription ➔ Devanagari translation and insights extraction).
 - **Completed By**: Kali
 - **Date & Time**: June 23, 2026, at 11:59 AM IST
 - **Version**: 1.0.0

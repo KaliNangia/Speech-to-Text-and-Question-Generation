@@ -24,12 +24,37 @@ The project specifically focuses on processing audio data from ANNAM (outreach i
 
 ```
 Speech-to-Text-and-Question-Generation/
+├── Pipelines/
+│   ├── Noise_Suppression_Diarization_Splitting_Local_Whisper_LoRA/
+│   │   ├── noise_suppression_diarization_splitting_local_whisper_transcription.ipynb # Local GPU Whisper-LoRA + Gemini Insights Pipeline
+│   │   └── README.md                                                                 # Documentation for the Local pipeline
+│   └── Noise_Suppression_Diarization_Splitting_Gemini_API/
+│       ├── noise_suppression_diarization_splitting_gemini_api_transcription.ipynb    # Gemini API Transcription Pipeline
+│       └── README.md                                                                 # Documentation for the Gemini API pipeline
 ├── Fine Tuning Script/
-│   └── Whisper_small_LORA_finetune.ipynb    # Fine-tuning notebook with LoRA
-├── LICENSE                                  # MIT License
-├── README.md                               # This file
-└── .git/                                   # Version control
+│   └── Whisper_small_LORA_finetune.ipynb               # Fine-tuning notebook with LoRA
+├── Helper Notebook/                                    # Development helper scripts
+├── Noise Suppression And Diarization/                 # Noise suppression & Diarization experiments
+├── LICENSE                                             # MIT License
+├── README.md                                          # This file
+└── .git/                                               # Version control
 ```
+
+## Transcription & Analysis Pipelines
+
+This repository contains two production-grade workflows for speaker diarization, audio splitting, and transcription:
+
+### 1. Local Whisper-LoRA Pipeline
+* **Path**: [Pipelines/Noise_Suppression_Diarization_Splitting_Local_Whisper_LoRA/noise_suppression_diarization_splitting_local_whisper_transcription.ipynb](Pipelines/Noise_Suppression_Diarization_Splitting_Local_Whisper_LoRA/noise_suppression_diarization_splitting_local_whisper_transcription.ipynb)
+* **Description**: Performs noise suppression, Pyannote diarization, audio splitting/speaker isolation, and runs a **local Whisper-large-v3-turbo** model wrapped with custom Punjabi/Gurmukhi LoRA adapters on a local GPU. It then queries the Gemini API for Devanagari transliteration and insights.
+* **Best For**: High-fidelity Gurmukhi transcription without sending raw segment audio to APIs (ideal for local/GPU environments).
+* **Documentation**: See the detailed [Pipelines/Noise_Suppression_Diarization_Splitting_Local_Whisper_LoRA/README.md](Pipelines/Noise_Suppression_Diarization_Splitting_Local_Whisper_LoRA/README.md).
+
+### 2. Gemini API-based Pipeline
+* **Path**: [Pipelines/Noise_Suppression_Diarization_Splitting_Gemini_API/noise_suppression_diarization_splitting_gemini_api_transcription.ipynb](Pipelines/Noise_Suppression_Diarization_Splitting_Gemini_API/noise_suppression_diarization_splitting_gemini_api_transcription.ipynb)
+* **Description**: Performs noise suppression, Pyannote diarization, and audio splitting, but delegates speech transcription directly to the **Gemini API** (`gemini-2.5-flash-lite`) by sending audio segments in-memory.
+* **Best For**: Lightweight execution environments without local GPU memory capacity for heavy Whisper models.
+* **Documentation**: See the detailed [Pipelines/Noise_Suppression_Diarization_Splitting_Gemini_API/README.md](Pipelines/Noise_Suppression_Diarization_Splitting_Gemini_API/README.md).
 
 ## Installation
 
