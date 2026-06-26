@@ -24,12 +24,56 @@ The project specifically focuses on processing audio data from ANNAM (outreach i
 
 ```
 Speech-to-Text-and-Question-Generation/
+├── Pipelines/
+│   ├── Noise_Suppression_Diarization_Splitting_Local_Whisper_LoRA/
+│   │   ├── noise_suppression_diarization_splitting_local_whisper_transcription.ipynb # Local GPU Whisper-LoRA + Gemini Insights Pipeline
+│   │   └── README.md                                                                 # Documentation for the Local pipeline
+│   └── Noise_Suppression_Diarization_Splitting_Gemini_API/
+│       ├── noise_suppression_diarization_splitting_gemini_api_transcription.ipynb    # Gemini API Transcription Pipeline
+│       └── README.md                                                                 # Documentation for the Gemini API pipeline
+├── Atomic Notebooks/                                   # Standalone step-by-step notebooks
+│   ├── 01_Audio_Ingestion_and_Standardization.ipynb    # Step 1: Resample audio to 16kHz mono WAV
+│   ├── 02_Noise_Suppression.ipynb                      # Step 2: Adaptive background noise reduction
+│   ├── 03_Speaker_Diarization.ipynb                   # Step 3: Pyannote deep speaker segmentation
+│   ├── 04_Timeline_Refinement_and_Serialization.ipynb # Step 4: Silence gap merging & metadata reports
+│   ├── 05_Audio_Splitting_and_Speaker_Isolation.ipynb  # Step 5: Isolated tracks & individual turn exporter
+│   └── 06_Whisper_Lora_Transcription_and_Gemini_Insights.ipynb # Step 6: Whisper Gurmukhi STT + Gemini Insights
 ├── Fine Tuning Script/
-│   └── Whisper_small_LORA_finetune.ipynb    # Fine-tuning notebook with LoRA
-├── LICENSE                                  # MIT License
-├── README.md                               # This file
-└── .git/                                   # Version control
+│   └── Whisper_small_LORA_finetune.ipynb               # Fine-tuning notebook with LoRA
+├── Helper Notebook/                                    # Development helper scripts
+├── Noise Suppression And Diarization/                 # Noise suppression & Diarization experiments
+├── LICENSE                                             # MIT License
+├── README.md                                          # This file
+└── .git/                                               # Version control
 ```
+
+## Transcription & Analysis Pipelines
+
+This repository contains two production-grade workflows for speaker diarization, audio splitting, and transcription:
+
+### 1. Local Whisper-LoRA Pipeline
+* **Path**: [Pipelines/Noise_Suppression_Diarization_Splitting_Local_Whisper_LoRA/noise_suppression_diarization_splitting_local_whisper_transcription.ipynb](Pipelines/Noise_Suppression_Diarization_Splitting_Local_Whisper_LoRA/noise_suppression_diarization_splitting_local_whisper_transcription.ipynb)
+* **Description**: Performs noise suppression, Pyannote diarization, audio splitting/speaker isolation, and runs a **local Whisper-large-v3-turbo** model wrapped with custom Punjabi/Gurmukhi LoRA adapters on a local GPU. It then queries the Gemini API for Devanagari transliteration and insights.
+* **Best For**: High-fidelity Gurmukhi transcription without sending raw segment audio to APIs (ideal for local/GPU environments).
+* **Documentation**: See the detailed [Pipelines/Noise_Suppression_Diarization_Splitting_Local_Whisper_LoRA/README.md](Pipelines/Noise_Suppression_Diarization_Splitting_Local_Whisper_LoRA/README.md).
+
+### 2. Gemini API-based Pipeline
+* **Path**: [Pipelines/Noise_Suppression_Diarization_Splitting_Gemini_API/noise_suppression_diarization_splitting_gemini_api_transcription.ipynb](Pipelines/Noise_Suppression_Diarization_Splitting_Gemini_API/noise_suppression_diarization_splitting_gemini_api_transcription.ipynb)
+* **Description**: Performs noise suppression, Pyannote diarization, and audio splitting, but delegates speech transcription directly to the **Gemini API** (`gemini-2.5-flash-lite`) by sending audio segments in-memory.
+* **Best For**: Lightweight execution environments without local GPU memory capacity for heavy Whisper models.
+* **Documentation**: See the detailed [Pipelines/Noise_Suppression_Diarization_Splitting_Gemini_API/README.md](Pipelines/Noise_Suppression_Diarization_Splitting_Gemini_API/README.md).
+
+### 3. Step-by-Step Atomic Notebooks
+* **Path**: [Atomic Notebooks/](Atomic%20Notebooks)
+* **Description**: A collection of 6 modular notebooks that decompose the pipeline into isolated execution steps:
+  1. [01_Audio_Ingestion_and_Standardization.ipynb](Atomic%20Notebooks/01_Audio_Ingestion_and_Standardization.ipynb)
+  2. [02_Noise_Suppression.ipynb](Atomic%20Notebooks/02_Noise_Suppression.ipynb)
+  3. [03_Speaker_Diarization.ipynb](Atomic%20Notebooks/03_Speaker_Diarization.ipynb)
+  4. [04_Timeline_Refinement_and_Serialization.ipynb](Atomic%20Notebooks/04_Timeline_Refinement_and_Serialization.ipynb)
+  5. [05_Audio_Splitting_and_Speaker_Isolation.ipynb](Atomic%20Notebooks/05_Audio_Splitting_and_Speaker_Isolation.ipynb)
+  6. [06_Whisper_Lora_Transcription_and_Gemini_Insights.ipynb](Atomic%20Notebooks/06_Whisper_Lora_Transcription_and_Gemini_Insights.ipynb)
+* **Best For**: Understanding the internal details of each processing stage, debugging, or running individual steps in isolation.
+* **Documentation**: See the detailed [Atomic Notebooks/README.md](Atomic%20Notebooks/README.md).
 
 ## Installation
 

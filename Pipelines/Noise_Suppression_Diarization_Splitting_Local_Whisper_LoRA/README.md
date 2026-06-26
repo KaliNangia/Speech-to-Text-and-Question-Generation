@@ -1,7 +1,7 @@
 # 🎙️ Unified Noise Suppression, Diarization, Splitting, & Speaker-Wise Local/API Transcription Pipeline
 
 
-A production-grade, end-to-end speech processing pipeline notebook (`pipeline.ipynb`) that converts raw outreach speech audio files into speaker-attributed transcripts, translations, and insights reports.
+A production-grade, end-to-end speech processing pipeline notebook ([noise_suppression_diarization_splitting_local_whisper_transcription.ipynb](noise_suppression_diarization_splitting_local_whisper_transcription.ipynb)) that converts raw outreach speech audio files into speaker-attributed transcripts, translations, and insights reports.
 
 ---
 
@@ -9,11 +9,39 @@ A production-grade, end-to-end speech processing pipeline notebook (`pipeline.ip
 
 ```mermaid
 graph TD
-    A[1. Google Drive Input File] -->|Ingestion & 16kHz mono standardization| B[2. Dynamic Noise Suppression]
-    B -->|Clean WAV Export| C[3. Pyannote Speaker Diarization]
-    C -->|Timeline Merging & Turn Refinement| D[4. Multi-Format Serializers]
-    D -->|Audio Splitting & Turn Isolation| E[5. In-Memory Whisper LoRA Transcription]
-    E -->|Fetch Transcript JSON File| F[6. Gemini Devanagari Translation & Insights]
+    subgraph Ingestion [1. Audio Ingestion & Standardization]
+        A1[Google Drive Audio File] -->|Load & Resample| A2[16kHz Mono Standardization]
+        A2 -->|Export WAV| A3[Standardized WAV File]
+    end
+
+    subgraph Suppression [2. Dynamic Noise Suppression]
+        A3 -->|Estimate Noise Profile| B1[Non-Stationary Noise Reduction]
+        B1 -->|Save Lossless WAV| B2[Cleaned WAV File]
+    end
+
+    subgraph Diarization [3. Pyannote Speaker Diarization]
+        B2 -->|Load Pyannote Model onto GPU| C1[Diarization Inference]
+        C1 -->|Cluster Speaker Embeddings| C2[Raw Timeline JSON]
+    end
+
+    subgraph Refinement [4. Timeline Merging & Serialization]
+        C2 -->|Merge Silence Gaps < 1.5s| D1[Refined Timeline]
+        D1 -->|Calculate Participation Stats| D2[Multi-Format Timelines CSV/RTTM/TXT]
+        D1 -->|Generate Markdown Report| D3[Diarized MD Report]
+    end
+
+    subgraph Splitting [5. Audio Splitting & Speaker Isolation]
+        B2 & D1 -->|Slice Audio Array by Timestamps| E1[Audio Slices]
+        E1 -->|Concatenate turns per speaker| E2[Speaker-wise Isolated WAVs]
+        E1 -->|Save individual sequence chunks| E3[Individual Turn WAVs]
+    end
+
+    subgraph Transcription [6. Local Whisper-LoRA & Gemini Insights]
+        E1 -->|Spectrogram Extraction| F1[Local Whisper Model]
+        F1 -->|Overlay Gurmukhi LoRA Adapter| F2[Local Gurmukhi STT]
+        F2 -->|Generate Chronological Transcript| F3[Punjabi Transcript JSON]
+        F3 -->|Gemini Transliterator & Analyst| F4[Devanagari Transliteration & Insights MD]
+    end
 ```
 
 ## Overview
@@ -40,9 +68,9 @@ This directory contains the final integrated pipeline which automates:
 ## Pipeline Structure
 
 ```
-Final/
-├── pipeline.ipynb       # Unified STT, Diarization & Insights notebook
-└── README.md            # This file
+Pipelines/Noise_Suppression_Diarization_Splitting_Local_Whisper_LoRA/
+├── noise_suppression_diarization_splitting_local_whisper_transcription.ipynb  # Local GPU Whisper-LoRA + Gemini Insights Pipeline
+└── README.md                                                                  # This file
 ```
 
 ---
@@ -58,7 +86,7 @@ Final/
 
 ### Setup
 
-Open the [pipeline.ipynb](pipeline.ipynb) notebook in Google Colab and run Step 0 to install all dependencies:
+Open the [noise_suppression_diarization_splitting_local_whisper_transcription.ipynb](noise_suppression_diarization_splitting_local_whisper_transcription.ipynb) notebook in Google Colab and run Step 0 to install all dependencies:
 
 ```bash
 # Core dependencies installed in Step 0
@@ -171,7 +199,7 @@ If you encounter memory allocation issues while transcribing:
 
 ---
 
-- **Pipeline Integration**: Created the unified notebook [pipeline.ipynb](pipeline.ipynb) containing the entire workflow (Ingestion ➔ Suppression ➔ Diarization ➔ Local Gurmukhi Whisper-LoRA Transcription ➔ Devanagari translation and insights extraction).
+- **Pipeline Integration**: Created the unified notebook [noise_suppression_diarization_splitting_local_whisper_transcription.ipynb](noise_suppression_diarization_splitting_local_whisper_transcription.ipynb) containing the entire workflow (Ingestion ➔ Suppression ➔ Diarization ➔ Local Gurmukhi Whisper-LoRA Transcription ➔ Devanagari translation and insights extraction).
 - **Completed By**: Kali
 - **Date & Time**: June 23, 2026, at 11:59 AM IST
 - **Version**: 1.0.0
