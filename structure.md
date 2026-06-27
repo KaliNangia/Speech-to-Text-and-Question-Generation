@@ -10,17 +10,17 @@ Speech-to-Text-and-Question-Generation/
 │   ├── 05_Audio_Splitting_and_Speaker_Isolation.ipynb
 │   ├── 06_Whisper_Lora_Transcription_and_Gemini_Insights.ipynb
 │   └── README.md
-├── Fine Tuning Script/            # Scripts for Whisper model fine-tuning (Kaggle/local)
-│   ├── Whisper_small_LORA_finetune.ipynb
-│   ├── whisper-finetune-kaggle.ipynb
-│   ├── whisper-finetune-large.ipynb
-│   └── whisper-finetune-turbo.ipynb
-├── Helper Notebook/               # Alternate model variations and helper scripts
-│   ├── Kaggle_whisper_medium_finetune.ipynb
-│   ├── Kaggle_whisper_turbo_finetune.ipynb
-│   ├── whisper-finetune-Fixed.ipynb
-│   ├── whisper-medium-updated (1).ipynb
-│   └── whisper-turbo-latest (1).ipynb
+├── Helper Notebook/               # Development helper scripts and model fine-tuning folder
+│   └── Fine Tuning Script/        # Scripts for model fine-tuning (Kaggle/local) and inference
+│       ├── Kaggle_whisper_medium_finetune.ipynb
+│       ├── Kaggle_whisper_turbo_finetune.ipynb
+│       ├── Whisper_small_LORA_finetune.ipynb
+│       ├── whisper-finetune-Fixed.ipynb
+│       ├── whisper-finetune-kaggle.ipynb
+│       ├── whisper-finetune-large.ipynb
+│       ├── whisper-finetune-turbo.ipynb
+│       ├── whisper-medium-updated (1).ipynb
+│       └── whisper-turbo-latest (1).ipynb
 ├── Notebooks (Diff Models)/       # Alternate inference backends (Gemini and Gemma models)
 │   ├── Gemini/
 │   │   └── Gurmukhi-Devanagari Dual-Script Transcription Workflow.ipynb

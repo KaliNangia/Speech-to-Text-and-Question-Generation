@@ -38,9 +38,9 @@ Speech-to-Text-and-Question-Generation/
 │   ├── 04_Timeline_Refinement_and_Serialization.ipynb # Step 4: Silence gap merging & metadata reports
 │   ├── 05_Audio_Splitting_and_Speaker_Isolation.ipynb  # Step 5: Isolated tracks & individual turn exporter
 │   └── 06_Whisper_Lora_Transcription_and_Gemini_Insights.ipynb # Step 6: Whisper Gurmukhi STT + Gemini Insights
-├── Fine Tuning Script/
-│   └── Whisper_small_LORA_finetune.ipynb               # Fine-tuning notebook with LoRA
-├── Helper Notebook/                                    # Development helper scripts
+├── Helper Notebook/                                    # Development helper scripts and fine-tuning
+│   └── Fine Tuning Script/                             # Fine-tuning and inference notebooks
+│       └── Whisper_small_LORA_finetune.ipynb           # Fine-tuning notebook with LoRA
 ├── Noise Suppression And Diarization/                 # Noise suppression & Diarization experiments
 ├── LICENSE                                             # MIT License
 ├── README.md                                          # This file
@@ -108,7 +108,7 @@ This repository contains two production-grade workflows for speaker diarization,
 Open and run the fine-tuning notebook:
 
 ```bash
-jupyter notebook "Fine Tuning Script/Whisper_small_LORA_finetune.ipynb"
+jupyter notebook "Helper Notebook/Fine Tuning Script/Whisper_small_LORA_finetune.ipynb"
 ```
 
 **Key steps in the notebook**:
